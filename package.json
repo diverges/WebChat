@@ -1,0 +1,12 @@
+{
+  "name": "WebChat",
+  "version": "1.0.0",
+  "description": "18652 Realtime Chat WebApp",
+  "dependencies": {
+    "express": "^4.10.8",
+    "jade": "latest",
+    "moment": "^2.9.0",
+    "socket.io": "latest"
+  },
+  "author": "Miguel Sotolongo"
+}

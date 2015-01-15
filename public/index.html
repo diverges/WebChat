@@ -1,0 +1,80 @@
+<!doctype html>
+<!-- Miguel Sotolongo (msotolon) -->
+
+<html>
+<head>
+	<title>18652: WebChat Application</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="css/chat.css" />
+</head>
+
+<body>
+
+<form class="user" action="">
+    <h1>18652: WebChat!</h1>
+    <input id="userText" autocomplete="off"/><button onclick="return updateUsername()">Enter</button>
+</form>  
+
+<div id="container">
+<div id="chat_frame">
+  <ul id="messages"><li class="recieved"><h2 id="m1">Welcome to [18652] Webchat!</h2></ul>
+	<form id="chat" action="" onsubmit="return broadcastMessage()">
+		<input id="mText" autocomplete="off" /><button>Send</button>
+	</form>
+</div>
+</div>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  	var socket = io();
+    var username = '';
+    var elem = document.getElementById('messages');
+
+    // Update session username
+    function updateUsername(){
+      username = $('#userText').val();
+      $('#userText').val('');
+
+      if(username != '')
+      {
+        $('#m1').text(username + ' - Welcome to [18652] Webchat!')
+        $('.user').toggleClass('user-change');
+      }
+
+      return false;
+    }
+
+    // Submit message
+  	function broadcastMessage(){
+      if(username == '')
+      {
+        alert('Please enter a valid username.');
+      }
+      else
+      {
+        var msg = '<b>' + username + ':</b> ' + $('#mText').val()
+    	  socket.emit('chat message', msg);
+    	  $('#mText').val('');
+      }
+    	return false;
+  	};
+
+    // Add new element and scroll down
+  	socket.on('chat message', function(msg){
+    	$('#messages').append('<li class="recieved">' +  msg + '</li>');
+      elem.scrollTop = elem.scrollHeight;
+  	});
+
+    // Add new element and scroll down
+    socket.on('chat stamp', function(msg){
+      $('#messages').append('<li class="sent">' +  msg + '</li>');
+      elem.scrollTop = elem.scrollHeight;
+    });
+
+</script>
+
+</body>
+
+
+</html>
